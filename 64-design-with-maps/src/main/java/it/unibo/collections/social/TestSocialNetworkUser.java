@@ -51,11 +51,11 @@ public final class TestSocialNetworkUser {
          *
          * * Adam Smith, asmith, (no age)
          */
-        final SocialNetworkUser<User> kbacon = null; //TODO
-        final SocialNetworkUser<User> dwashington = null; //TODO
-        final SocialNetworkUser<User> mgladwell = null; //TODO
-        final SocialNetworkUser<User> ntaleb = null; //TODO
-        final User asmith = null; //TODO
+        final SocialNetworkUser<User> kbacon = new SocialNetworkUserImpl<>("Kevin", "Bacon", "kbacon", 56);
+        final SocialNetworkUser<User> dwashington = new SocialNetworkUserImpl<>("Denzel", "Washington", "dwashington", 59);
+        final SocialNetworkUser<User> mgladwell = new SocialNetworkUserImpl<>("Malcom", "Gladwell", "mgladwell", 51);
+        final SocialNetworkUser<User> ntaleb = new SocialNetworkUserImpl<>("Nicholas", "Taleb", "ntaleb", 54);
+        final User asmith = new UserImpl("Adam", "Smith", "asmith");
         /*
          * Make people follow each other
          */
@@ -74,10 +74,27 @@ public final class TestSocialNetworkUser {
         assertTrue("M Gladwell has not set yet any group called \"Close friends\"", mgladFriends.isEmpty());
         final Collection<User> dwashFriends = dwashington.getFollowedUsersInGroup(WRITERS);
         assertTrue("Denzel has 2 followed people in group \"" + WRITERS + "\"", dwashFriends.size() == 2);
+        
+        /*
+         * Debugging non-duplicate friends
+         */
+        /*
+        dwashington.addFollowedUser(WRITERS, mgladwell);
+        
+        System.out.println("I re-added a user which already is a friend with " 
+        + dwashington.getFirstName() 
+        + " "
+        + dwashington.getLastName());
+
+        final Collection<User> debugDwashFriends = dwashington.getFollowedUsersInGroup(WRITERS);
+        assertTrue("Denzel has still 2 followed people in group \"" + WRITERS + "\"", debugDwashFriends.size() == 2);
+        */
+
         /*
          * Adding another friend to Denzel's "writers" group
          */
         dwashFriends.add(asmith);
+
         /*
          * The above operation *MUST* have no effect on Denzel's profile itself:
          * STILL TWO PEOPLE in denzel's group called writers
@@ -86,7 +103,11 @@ public final class TestSocialNetworkUser {
             "Denzel has STILL 2 followed people in group \"" + WRITERS + "\"",
             dwashington.getFollowedUsersInGroup(WRITERS).size() == 2
         );
+
+
     }
+
+
 
     private static void assertTrue(final String message, final boolean value) {
         if (value) {
